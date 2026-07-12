@@ -4,31 +4,7 @@
 
 ## 系统架构
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    听障人士关护系统                               │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌──────────────┐      WiFi传输      ┌──────────────────────┐   │
-│  │   ESP32-S3   │ ─────────────────→ │   星火一号            │   │
-│  │  声音识别模块  │                    │  (STM32F407)         │   │
-│  │              │                    │   中枢处理器           │   │
-│  │ • I2S麦克风   │                    │                      │   │
-│  │ • 音频采集    │                    │ • 数据汇总处理        │   │
-│  │ • 声音识别    │                    │ • 多模态融合          │   │
-│  │ • WiFi通信    │                    │ • 告警通知            │   │
-│  └──────────────┘                    └──────────────────────┘   │
-│         │                                      │                │
-│         │ 识别声音                              │ 触发告警        │
-│         ▼                                      ▼                │
-│  ┌──────────────┐                    ┌──────────────────────┐   │
-│  │  环境声音     │                    │   输出设备            │   │
-│  │ (门铃/敲门声/ │                    │ (振动器/LED/语音播报) │   │
-│  │  电话/警报等) │                    │                      │   │
-│  └──────────────┘                    └──────────────────────┘   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-```
+![系统架构图](https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hearing%20impaired%20care%20system%20architecture%20diagram%2C%20ESP32-S3%20sound%20recognition%20module%20connected%20to%20STM32F407%20central%20processor%20via%20WiFi%2C%20environmental%20sounds%20input%2C%20output%20devices%20(vibrator%2C%20LED%2C%20voice%20broadcast)%2C%20professional%20technical%20diagram%2C%20blue%20and%20white%20color%20scheme%2C%20clean%20modern%20design&image_size=landscape_16_9)
 
 **本项目展示的是系统中的声音识别部分（ESP32-S3模块）。**
 
@@ -73,15 +49,7 @@
 
 ### 硬件连接示意图
 
-```
-ESP32-S3          INMP441麦克风          OLED屏幕
-─────────         ─────────────         ──────────
-GPIO 5  ────────→ BCLK                  SCL ←── GPIO 11
-GPIO 6  ────────→ LRCLK                 SDA ←── GPIO 12
-GPIO 7  ────────→ DIN                   VCC ←── 3.3V
-3.3V    ────────→ VCC                   GND ←── GND
-GND     ────────→ GND
-```
+![硬件连接图](https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=ESP32-S3%20hardware%20connection%20diagram%2C%20showing%20connections%20between%20ESP32-S3%2C%20INMP441%20microphone%20module%2C%20and%20OLED%20screen%2C%20I2S%20pins%20GPIO5%20BCLK%2C%20GPIO6%20LRCLK%2C%20GPIO7%20DIN%2C%20I2C%20pins%20GPIO11%20SCL%2C%20GPIO12%20SDA%2C%20power%20connections%2C%20circuit%20schematic%20style%2C%20blue%20and%20white%20color%20scheme&image_size=landscape_16_9)
 
 ### 注意事项
 
@@ -228,12 +196,7 @@ ESP32-S3通过WiFi使用UDP协议与目标设备进行通信。
 
 每个UDP数据包长度为8字节，格式如下：
 
-```
-┌─────────────────────────────────────────────────────────┐
-│ Byte 0 │ Byte 1 │ Byte 2-7                             │
-│ EventID │ Confidence │ MAC Address (6 bytes)            │
-└─────────────────────────────────────────────────────────┘
-```
+![UDP数据包格式](https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=UDP%20packet%20format%20diagram%2C%20clean%20tech%20illustration%2C%208%20bytes%20structure%2C%20showing%20Byte%200%3A%20EventID%2C%20Byte%201%3A%20Confidence%2C%20Bytes%202-7%3A%20MAC%20Address%2C%20blue%20and%20white%20color%20scheme%2C%20professional%20network%20protocol%20diagram&image_size=landscape_16_9)
 
 ### Event ID 定义
 
@@ -281,11 +244,7 @@ ESP32-S3通过WiFi使用UDP协议与目标设备进行通信。
 
 ### 声音识别流程
 
-```
-麦克风输入 → I2S采集 → 数据缓存 → DSP处理(MFCC) → 特征提取 → 
-     ↓
-TensorFlow Lite推理 → 分类结果 → 置信度判断 → WiFi传输 → 中枢处理
-```
+![声音识别流程图](https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=sound%20recognition%20process%20flowchart%2C%20microphone%20input%20to%20I2S%20acquisition%2C%20data%20buffering%2C%20DSP%20processing%20with%20MFCC%2C%20feature%20extraction%2C%20TensorFlow%20Lite%20inference%2C%20classification%20result%2C%20confidence%20judgment%2C%20WiFi%20transmission%2C%20central%20processing%2C%20flowchart%20style%2C%20blue%20and%20white%20color%20scheme%2C%20professional%20technical%20diagram&image_size=landscape_16_9)
 
 ### 关键技术
 
