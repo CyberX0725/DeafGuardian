@@ -1,2 +1,138 @@
 # DeafGuardian
-ESP32在线AI识别算法
+
+基于ESP32-S3的声音识别系统，使用Edge Impulse机器学习模型实现多种声音的实时识别。
+
+## 功能特性
+
+- 实时音频采集与处理
+- 支持7种声音分类识别
+- I2S接口麦克风输入
+- 基于TensorFlow Lite Micro的边缘推理
+- 16kHz采样率，高精度识别
+
+## 硬件要求
+
+- ESP32-S3开发板
+- I2S接口麦克风模块（如INMP441）
+- USB数据线
+
+## 引脚连接
+
+| ESP32-S3引脚 | 麦克风模块引脚 | 说明     |
+| ------------ | -------------- | -------- |
+| GPIO 26      | BCLK           | 位时钟   |
+| GPIO 32      | LRCLK          | 帧时钟   |
+| GPIO 33      | DIN            | 数据输入 |
+| 3.3V         | VCC            | 电源     |
+| GND          | GND            | 接地     |
+
+## 软件环境配置
+
+### 步骤1：安装VS Code
+
+下载并安装最新版本的Visual Studio Code：
+[https://code.visualstudio.com/](https://code.visualstudio.com/)
+
+### 步骤2：安装PlatformIO插件
+
+1. 打开VS Code
+2. 点击左侧活动栏的"扩展"图标（或按 `Ctrl+Shift+X`）
+3. 在搜索框中输入 `PlatformIO IDE`
+4. 点击"安装"按钮
+5. 等待安装完成后重启VS Code
+
+### 步骤3：克隆项目
+
+```bash
+git clone https://github.com/CyberX0725/DeafGuardian.git
+cd DeafGuardian
+```
+
+### 步骤4：打开项目
+
+1. 在VS Code中点击"文件" → "打开文件夹"
+2. 选择 `DeafGuardian` 文件夹
+3. PlatformIO会自动加载项目配置
+
+### 步骤5：配置开发板
+
+1. 点击左下角的"PIO Home"图标
+2. 在"Devices"选项卡中确认ESP32-S3已正确连接
+3. 检查 `platformio.ini` 文件中的配置：
+
+```ini
+[env:esp32-s3-devkitc-1]
+platform = espressif32
+board = esp32-s3-devkitc-1
+framework = arduino
+monitor_speed = 115200
+```
+
+## 编译与上传
+
+### 编译项目
+
+点击左下角的 ✅ 图标，或使用快捷键 `Ctrl+Alt+B` 编译项目。
+
+### 上传到开发板
+
+1. 将ESP32-S3通过USB连接到电脑
+2. 点击右下角的 ⬆️ 图标上传固件
+3. 等待上传完成
+
+### 查看串口输出
+
+1. 点击左下角的"串口监视器"图标
+2. 选择正确的串口端口
+3. 波特率设置为 `115200`
+4. 即可看到声音识别结果
+
+## 项目结构
+
+```
+DeafGuardian/
+├── lib/
+│   └── Acoustic_Sentry_inferencing/     # Edge Impulse推理库
+│       ├── src/
+│       │   ├── edge-impulse-sdk/        # Edge Impulse SDK
+│       │   ├── model-parameters/        # 模型参数
+│       │   └── Acoustic_Sentry_inferencing.h
+│       └── examples/                    # 示例代码
+├── src/                                 # 主程序源码
+├── include/                             # 头文件
+├── platformio.ini                       # PlatformIO配置
+└── README.md                            # 项目说明
+```
+
+## 模型参数
+
+- 项目名称：Acoustic_Sentry
+- 输入频率：16000 Hz
+- 采样点数：16000
+- 分类类别：7种
+- 推理引擎：TensorFlow Lite
+- 量化类型：INT8
+
+## 使用说明
+
+1. 确保麦克风模块正确连接
+2. 上传固件后等待2秒初始化
+3. 系统开始持续采集音频并进行识别
+4. 在串口监视器中查看识别结果和置信度
+
+## 技术原理
+
+1. **音频采集**：通过I2S接口实时采集麦克风数据
+2. **信号处理**：使用DSP算法提取音频特征（MFCC）
+3. **模型推理**：基于TensorFlow Lite Micro运行预训练模型
+4. **结果输出**：输出各类别的置信度分数
+
+## 许可证
+
+本项目基于Apache License 2.0开源协议。
+
+## 注意事项
+
+- 需要Edge Impulse订阅才能使用此模型
+- 确保开发板有足够的内存（至少64KB RAM）
+- 建议在安静环境下测试以获得最佳识别效果
